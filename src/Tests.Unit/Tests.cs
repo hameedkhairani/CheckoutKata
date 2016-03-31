@@ -1,14 +1,19 @@
-﻿using NUnit.Framework;
+﻿using App;
+using NUnit.Framework;
 
 namespace Tests.Unit
 {
     [TestFixture]
     public class Tests
     {
-        [Test]
-        public void Should_be_true()
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GivenEmptyBasket_WhenCheckedOut_ThenTotalPriceIsZero(string skuCodes)
         {
-            Assert.That(true, Is.EqualTo(false));
+            var co = new Checkout();
+            co.Scan(skuCodes);
+            Assert.That(co.TotalPrice, Is.EqualTo(0));
         }
     }
 }
