@@ -18,9 +18,19 @@
             }
             else
             {
-                var product = _productRepository.GetByCode(skuCodes);
-                _totalPrice = product.UnitPrice;
+                _totalPrice = AddPrices(skuCodes);
             }
+        }
+
+        private decimal AddPrices(string skuCodes)
+        {
+            var totalPrice = 0m;
+            foreach (var code in skuCodes)
+            {
+                var item = _productRepository.GetByCode(code.ToString());
+                totalPrice += item.UnitPrice;
+            }
+            return totalPrice;
         }
 
         public decimal TotalPrice
