@@ -1,6 +1,5 @@
 ﻿using System;
 using App;
-using Moq;
 using NUnit.Framework;
 
 namespace Tests.Unit

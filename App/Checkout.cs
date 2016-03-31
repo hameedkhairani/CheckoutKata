@@ -3,23 +3,19 @@
     public class Checkout
     {
         private readonly IProductRepository _productRepository;
+        private readonly IOfferRepository _offerRepository;
+
         private decimal _totalPrice;
 
-        public Checkout(IProductRepository productRepository)
+        public Checkout(IProductRepository productRepository, IOfferRepository offerRepository)
         {
             _productRepository = productRepository;
+            _offerRepository = offerRepository;
         }
 
         public void Scan(string skuCodes)
         {
-            if (string.IsNullOrWhiteSpace(skuCodes))
-            {
-                _totalPrice = 0;
-            }
-            else
-            {
-                _totalPrice = AddPrices(skuCodes);
-            }
+            _totalPrice = string.IsNullOrWhiteSpace(skuCodes) ? 0 : AddPrices(skuCodes);
         }
 
         private decimal AddPrices(string skuCodes)

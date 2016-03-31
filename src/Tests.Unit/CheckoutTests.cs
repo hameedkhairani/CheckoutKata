@@ -13,13 +13,17 @@ namespace Tests.Unit
         private Product _testProductC;
 
         private Mock<IProductRepository> _mockProductRepository;
+        private Mock<IOfferRepository> _mockOfferRepository;
+
         private Checkout _checkout;
 
         [SetUp]
         public void SetUp()
         {
             _mockProductRepository = new Mock<IProductRepository>();
-            _checkout = new Checkout(_mockProductRepository.Object);
+            _mockOfferRepository = new Mock<IOfferRepository>();
+
+            _checkout = new Checkout(_mockProductRepository.Object, _mockOfferRepository.Object);
 
             _testProductA = new Product { SkuCode = "A", UnitPrice = 50m };
             _testProductB = new Product { SkuCode = "B", UnitPrice = 30m };

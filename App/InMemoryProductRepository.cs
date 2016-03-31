@@ -5,7 +5,7 @@ namespace App
 {
     public class InMemoryProductRepository : IProductRepository
     {
-        Dictionary<string,Product> _products = new Dictionary<string, Product>();
+        private readonly Dictionary<string,Product> _products = new Dictionary<string, Product>();
 
         public InMemoryProductRepository()
         {
