@@ -4,6 +4,6 @@ namespace App
 {
     public interface IPriceCalculator
     {
-        decimal Calculate(Dictionary<string, int> order);
+        decimal Calculate(Order order);
     }
 }

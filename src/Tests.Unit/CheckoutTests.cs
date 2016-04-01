@@ -17,6 +17,7 @@ namespace Tests.Unit
 
         private Checkout _checkout;
         private PriceCalculator _priceCalculator;
+        private OrderCreator _orderCreator;
 
         [SetUp]
         public void SetUp()
@@ -25,7 +26,8 @@ namespace Tests.Unit
             _mockOfferRepository = new Mock<IOfferRepository>();
 
             _priceCalculator = new PriceCalculator(_mockProductRepository.Object, _mockOfferRepository.Object);
-            _checkout = new Checkout(_priceCalculator);
+            _orderCreator = new OrderCreator();
+            _checkout = new Checkout(_orderCreator,  _priceCalculator);
 
             _testProductA = new Product { SkuCode = "A", UnitPrice = 50m };
             _testProductB = new Product { SkuCode = "B", UnitPrice = 30m };

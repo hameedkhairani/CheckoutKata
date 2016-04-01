@@ -14,16 +14,16 @@ namespace App
             _offerRepository = offerRepository;
         }
 
-        public decimal Calculate(Dictionary<string, int> order)
+        public decimal Calculate(Order order)
         {
             decimal totalPrice = 0;
-            foreach (var code in order.Keys)
+            foreach (var code in order.Items.Keys)
             {
                 Product product;
                 if (TryGetProduct(code, out product))
                 {
                     var offers = _offerRepository.GetByCode(code);
-                    totalPrice += CalculateProductPrice(product, offers, order[code]);
+                    totalPrice += CalculateProductPrice(product, offers, order.Items[code]);
                 }
             }
             return totalPrice;
