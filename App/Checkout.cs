@@ -1,4 +1,7 @@
-﻿namespace App
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace App
 {
     public class Checkout
     {
@@ -15,18 +18,33 @@
 
         public void Scan(string skuCodes)
         {
-            _totalPrice = string.IsNullOrWhiteSpace(skuCodes) ? 0 : AddPrices(skuCodes);
+            var order = BuildOrder(skuCodes);
+            if (order != null)
+            {
+                _totalPrice = CalculateTotalPrice(order);
+            }
         }
 
-        private decimal AddPrices(string skuCodes)
+        private Dictionary<string, int> BuildOrder(string skuCodes)
         {
-            var totalPrice = 0m;
-            foreach (var code in skuCodes)
+            if (!string.IsNullOrWhiteSpace(skuCodes))
             {
-                var item = _productRepository.GetByCode(code.ToString());
-                totalPrice += item.UnitPrice;
+                return skuCodes.ToCharArray()
+                               .GroupBy(p => p)
+                               .ToDictionary(p => p.Key.ToString(), p => p.Count());
             }
-            return totalPrice;
+            return null;
+        }
+
+        private decimal CalculateTotalPrice(Dictionary<string, int> order)
+        {
+            return order.Keys.Sum(code => CalculatePrice(code, order[code]));
+        }
+
+        private decimal CalculatePrice(string skuCode, int quantity)
+        {
+            var product = _productRepository.GetByCode(skuCode);
+            return product.UnitPrice * quantity;
         }
 
         public decimal TotalPrice
