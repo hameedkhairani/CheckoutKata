@@ -17,13 +17,16 @@ namespace App
         public decimal Calculate(Order order)
         {
             decimal totalPrice = 0;
-            foreach (var code in order.Items.Keys)
+            if (order != null)
             {
-                Product product;
-                if (TryGetProduct(code, out product))
+                foreach (var code in order.Items.Keys)
                 {
-                    var offers = _offerRepository.GetByCode(code);
-                    totalPrice += CalculateProductPrice(product, offers, order.Items[code]);
+                    Product product;
+                    if (TryGetProduct(code, out product))
+                    {
+                        var offers = _offerRepository.GetByCode(code);
+                        totalPrice += CalculateProductPrice(product, offers, order.Items[code]);
+                    }
                 }
             }
             return totalPrice;

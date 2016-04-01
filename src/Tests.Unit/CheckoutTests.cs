@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using App;
+﻿using App;
 using Moq;
 using NUnit.Framework;
 
@@ -8,76 +7,45 @@ namespace Tests.Unit
     [TestFixture]
     public class CheckoutTests
     {
-        private Product _testProductA;
-        private Product _testProductB;
-        private Product _testProductC;
-
-        private Mock<IProductRepository> _mockProductRepository;
-        private Mock<IOfferRepository> _mockOfferRepository;
-
+        private Mock<IOrderCreator> _mockOrderCreator;
+        private Mock<IPriceCalculator> _mockPriceCalculator;
         private Checkout _checkout;
-        private PriceCalculator _priceCalculator;
-        private OrderCreator _orderCreator;
+        private string _testSkuCodes;
+        private Order _testOrder;
+        private decimal _testTotalPrice;
 
         [SetUp]
         public void SetUp()
         {
-            _mockProductRepository = new Mock<IProductRepository>();
-            _mockOfferRepository = new Mock<IOfferRepository>();
-
-            _priceCalculator = new PriceCalculator(_mockProductRepository.Object, _mockOfferRepository.Object);
-            _orderCreator = new OrderCreator();
-            _checkout = new Checkout(_orderCreator,  _priceCalculator);
-
-            _testProductA = new Product { SkuCode = "A", UnitPrice = 50m };
-            _testProductB = new Product { SkuCode = "B", UnitPrice = 30m };
-            _testProductC = new Product { SkuCode = "C", UnitPrice = 20m };
-
-            _mockProductRepository.Setup(p => p.GetByCode(_testProductA.SkuCode)).Returns(_testProductA);
-            _mockProductRepository.Setup(p => p.GetByCode(_testProductB.SkuCode)).Returns(_testProductB);
-            _mockProductRepository.Setup(p => p.GetByCode(_testProductC.SkuCode)).Returns(_testProductC);
-        }
-
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GivenNoProducts_WhenCheckedOut_ThenTotalPriceIsZero(string skuCodes)
-        {
-            _checkout.Scan(skuCodes);
-            Assert.That(_checkout.TotalPrice, Is.EqualTo(0));
+            _mockOrderCreator = new Mock<IOrderCreator>();
+            _mockPriceCalculator = new Mock<IPriceCalculator>();
+            _checkout = new Checkout(_mockOrderCreator.Object, _mockPriceCalculator.Object);
+            _testSkuCodes = "ABCA";
+            _testOrder = new Order();
+            _testTotalPrice = 100m;
         }
 
         [Test]
-        public void GivenSingleProductWithNoOffers_WhenCheckedOut_ThenTotalPriceIsEqualToUnitPrice()
+        public void GivenValidOrder_WhenItemsScanned_ThenCalculatesTotalPriceOnOrder()
         {
-            _checkout.Scan(_testProductA.SkuCode);
-            Assert.That(_checkout.TotalPrice, Is.EqualTo(_testProductA.UnitPrice));
+            _mockOrderCreator.Setup(p => p.Create(_testSkuCodes)).Returns(_testOrder);
+            _mockPriceCalculator.Setup(p => p.Calculate(_testOrder)).Returns(_testTotalPrice);
+
+            _checkout.Scan(_testSkuCodes);
+
+            _mockOrderCreator.Verify(p => p.Create(_testSkuCodes));
+            _mockPriceCalculator.Verify(p => p.Calculate(_testOrder));
+            Assert.That(_checkout.TotalPrice, Is.EqualTo(_testTotalPrice));
         }
 
         [Test]
-        public void GivenMultipleProductsWithNoOffers_WhenCheckedOut_ThenTotalPriceIsEqualToSumOfUnitPrices()
+        public void GivenInvalidOrder_WhenItemsScanned_ThenDoesNotCalculateTotalPrice()
         {
-            _checkout.Scan(_testProductA.SkuCode + _testProductB.SkuCode);
-            Assert.That(_checkout.TotalPrice, Is.EqualTo(_testProductA.UnitPrice + _testProductB.UnitPrice));
-        }
+            _mockOrderCreator.Setup(p => p.Create(_testSkuCodes)).Returns((Order) null);
+            _checkout.Scan(_testSkuCodes);
 
-        [TestCase(2)]
-        [TestCase(3)]
-        public void GivenSameProductMultipleTimesWithNoOffers_WhenCheckedOut_ThenTotalPriceIsEqualToUnitPriceTimesQuantity(int quantity)
-        {
-            var skuCodes = string.Concat(Enumerable.Repeat(_testProductA.SkuCode, quantity));
-            _checkout.Scan(skuCodes);
-            Assert.That(_checkout.TotalPrice, Is.EqualTo(_testProductA.UnitPrice * quantity));
-        }
-
-        [TestCase("ABC")]
-        [TestCase("ACB")]
-        [TestCase("BCA")]
-        public void GivenMultipleProductsInDifferentOrderWithNoOffers_WhenCheckedOut_ThenTotalPriceIsTheSame(string skuCodes)
-        {
-            var expectedTotalPrice = _testProductA.UnitPrice + _testProductB.UnitPrice + _testProductC.UnitPrice;
-            _checkout.Scan(skuCodes);
-            Assert.That(_checkout.TotalPrice, Is.EqualTo(expectedTotalPrice));
+            _mockOrderCreator.Verify(p => p.Create(_testSkuCodes));
+            _mockPriceCalculator.Verify(p => p.Calculate(It.IsAny<Order>()), Times.Never);
         }
 
     }

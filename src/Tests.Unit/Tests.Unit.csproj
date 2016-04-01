@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckoutTests.cs" />
+    <Compile Include="PriceCalculatorTests.cs" />
     <Compile Include="OfferRepositoryTests.cs" />
+    <Compile Include="OrderCreatorTests.cs" />
     <Compile Include="ProductRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
