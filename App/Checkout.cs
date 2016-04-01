@@ -5,15 +5,12 @@ namespace App
 {
     public class Checkout
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IOfferRepository _offerRepository;
-
+        private readonly IPriceCalculator _priceCalculator;
         private decimal _totalPrice;
 
-        public Checkout(IProductRepository productRepository, IOfferRepository offerRepository)
+        public Checkout(IPriceCalculator priceCalculator)
         {
-            _productRepository = productRepository;
-            _offerRepository = offerRepository;
+            _priceCalculator = priceCalculator;
         }
 
         public void Scan(string skuCodes)
@@ -21,7 +18,7 @@ namespace App
             var order = BuildOrder(skuCodes);
             if (order != null)
             {
-                _totalPrice = CalculateTotalPrice(order);
+                _totalPrice = _priceCalculator.Calculate(order);
             }
         }
 
@@ -34,17 +31,6 @@ namespace App
                                .ToDictionary(p => p.Key.ToString(), p => p.Count());
             }
             return null;
-        }
-
-        private decimal CalculateTotalPrice(Dictionary<string, int> order)
-        {
-            return order.Keys.Sum(code => CalculatePrice(code, order[code]));
-        }
-
-        private decimal CalculatePrice(string skuCode, int quantity)
-        {
-            var product = _productRepository.GetByCode(skuCode);
-            return product.UnitPrice * quantity;
         }
 
         public decimal TotalPrice

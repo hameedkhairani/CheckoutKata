@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using App;
 using Moq;
 using NUnit.Framework;
@@ -17,20 +18,20 @@ namespace Tests.Unit
         }
 
         [Test]
-        public void GivenOfferIsUnavailableForProduct_WhenRepositoryQueried_ThenReturnsNull()
+        public void GivenOffersAreUnavailableForProduct_WhenRepositoryQueried_ThenReturnsNull()
         {
-            const string testSkuCode = "some_code_without_offer";
+            const string testSkuCode = "some_code_without_offers";
             var offer = _offerRepository.GetByCode(testSkuCode);
-            Assert.That(offer, Is.Null);
+            Assert.That(offer, Is.Empty);
         }
 
         [Test]
-        public void GivenOfferIsAvailableForProduct_WhenRepositoryQueried_ThenReturnsOffer()
+        public void GivenOfferAreAvailableForProduct_WhenRepositoryQueried_ThenReturnsOffers()
         {
             const string testSkuCode = "A";
-            var offer = _offerRepository.GetByCode(testSkuCode);
-            Assert.That(offer, Is.Not.Null);
-            Assert.That(offer.SkuCode, Is.EqualTo(testSkuCode));
+            var offers = _offerRepository.GetByCode(testSkuCode);
+            Assert.That(offers, Is.Not.Null);
+            Assert.That(offers.First().SkuCode, Is.EqualTo(testSkuCode));
         }
 
     }
