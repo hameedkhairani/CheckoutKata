@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using App.Contracts;
+using App.Models;
 
-namespace App
+namespace App.Domain
 {
     public class PriceCalculator : IPriceCalculator
     {

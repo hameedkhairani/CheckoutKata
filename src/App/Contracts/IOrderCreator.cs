@@ -1,4 +1,6 @@
-namespace App
+using App.Models;
+
+namespace App.Contracts
 {
     public interface IOrderCreator
     {

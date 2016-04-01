@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using App.Contracts;
+using App.Models;
 
-namespace App
+namespace App.Domain
 {
     public class InMemoryOfferRepository : IOfferRepository
     {

@@ -1,5 +1,7 @@
 ﻿using System;
 using App;
+using App.Contracts;
+using App.Domain;
 using NUnit.Framework;
 
 namespace Tests.Unit

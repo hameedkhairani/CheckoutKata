@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using App.Models;
 
-namespace App
+namespace App.Contracts
 {
     public interface IOfferRepository
     {

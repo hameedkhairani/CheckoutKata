@@ -1,4 +1,7 @@
 ﻿using App;
+using App.Contracts;
+using App.Domain;
+using App.Models;
 using Moq;
 using NUnit.Framework;
 

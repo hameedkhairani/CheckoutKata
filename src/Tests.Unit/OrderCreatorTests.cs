@@ -1,4 +1,5 @@
 ﻿using App;
+using App.Domain;
 using NUnit.Framework;
 
 namespace Tests.Unit

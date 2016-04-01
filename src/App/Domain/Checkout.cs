@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using App.Contracts;
 
-namespace App
+namespace App.Domain
 {
     public class Checkout
     {

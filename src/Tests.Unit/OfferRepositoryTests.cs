@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using App;
+using App.Contracts;
+using App.Domain;
 using Moq;
 using NUnit.Framework;
 

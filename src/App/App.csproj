@@ -39,18 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Checkout.cs" />
-    <Compile Include="IOfferRepository.cs" />
-    <Compile Include="IOrderCreator.cs" />
-    <Compile Include="IPriceCalculator.cs" />
-    <Compile Include="IProductRepository.cs" />
-    <Compile Include="Offer.cs" />
-    <Compile Include="InMemoryOfferRepository.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="OrderCreator.cs" />
-    <Compile Include="PriceCalculator.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="InMemoryProductRepository.cs" />
+    <Compile Include="Domain\Checkout.cs" />
+    <Compile Include="Contracts\IOfferRepository.cs" />
+    <Compile Include="Contracts\IOrderCreator.cs" />
+    <Compile Include="Contracts\IPriceCalculator.cs" />
+    <Compile Include="Contracts\IProductRepository.cs" />
+    <Compile Include="Models\Offer.cs" />
+    <Compile Include="Domain\InMemoryOfferRepository.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Domain\OrderCreator.cs" />
+    <Compile Include="Domain\PriceCalculator.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Domain\InMemoryProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
