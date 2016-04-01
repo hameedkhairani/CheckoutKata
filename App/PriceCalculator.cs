@@ -48,7 +48,8 @@ namespace App
 
         private decimal CalculateProductPrice(Product product, IEnumerable<Offer> offers, int quantity)
         {
-            //to do: implement offers
+            //to do: implement offer discounts
+
             return product.UnitPrice * quantity;
         }
     }
